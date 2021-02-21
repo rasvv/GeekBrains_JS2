@@ -42,13 +42,14 @@ class ProductsItem{
 	constructor(title, price){
 		this.title = title;
 		this.price = price;
+		this.img = '<img src="https://picsum.photos/200/200?random=${Math.random()}" alt=""></img>'
 	}
 
 	render() {
 		return `<div class="product__item">
 		<h3>${this.title}</h3>
 		<div class='img'> 
-			<img src="https://picsum.photos/200/200?random=${Math.random()}" alt="">
+			${this.img}
 		</div>					
 		<p>${this.price} р.</p>
 		<button class="by__btn">Добавить в корзину</button>
