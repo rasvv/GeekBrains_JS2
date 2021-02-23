@@ -42,7 +42,7 @@ class ProductsList {
 
 	setProductsTotalPrice(price) {
 		let total = +this.totalPrice.dataset.price;
-		total += +price;
+		total += price;
 		this.totalPrice.dataset.price = total;
 	}
 
