@@ -92,3 +92,92 @@ class ProductsList {
 const list = new ProductsList();
 list.fetchProducts();
 list.render();
+
+class Breads{
+	constructor(name, price, calories){
+		this.name = name;
+		this.price = price;
+		this.calories = calories;
+	}
+
+	fetchSize() {
+		this.size = [
+			{id: 1, name: 'Big', price: 100, calories: 40},
+			{id: 2, name: 'Small', price: 50, calories: 20},
+		]
+	}
+}
+
+class Stuffings{
+	constructor(name, price, calories){
+		this.name = name;
+		this.price = price;
+		this.calories = calories;
+	}
+
+	fetchStuffing() {
+		this.stupping = [
+			{id: 1, name: 'Cheese', price: 10, calories: 20},
+			{id: 2, name: 'Salade', price: 20, calories: 5},
+			{id: 3, name: 'Potato', price: 15, calories: 10},
+		]
+	}
+}
+
+class Toppings{
+	constructor(name, price, calories){
+		this.name = name;
+		this.price = price;
+		this.calories = calories;
+	}
+
+	fetchTopping() {
+		this.Topping = [
+			{id: 1, name: 'Pepper', price: 15, calories: 0},
+			{id: 2, name: 'Sous', price: 20, calories: 5},
+		]
+	}
+}
+
+
+
+
+
+
+
+
+class Hamburger {
+	constructor(size, stuffing, topping) {
+
+	}
+
+
+
+	addTopping(topping) { 	//Добавить добавку
+
+	}
+
+	removeTopping(topping){ //Убрать добавку
+
+	}
+
+	getToppings(topping){ 	//Получить список добавок
+
+	}
+
+	getSize() {					//Узнать размер гамбургера
+
+	}
+
+	getStuffing(){				//Узнать начинку
+
+	}
+
+	calculatePrice() {		//Расчет цены
+
+	}
+
+	calculateCalories() {	//Подсчет калорий
+
+	}
+}

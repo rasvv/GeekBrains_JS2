@@ -186,7 +186,7 @@ main {
   margin: 0 auto;
 }
 
-.products__list {
+.products__items {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -202,7 +202,7 @@ main {
   margin-bottom: 20px;
 }
 
-.product__item {
+.products__item {
   height: 350px;
   width: 250px;
   background-color: #eee;
@@ -221,9 +221,8 @@ main {
           align-items: center;
 }
 
-.product__item:hover {
-  -webkit-transform: scale(1.05);
-          transform: scale(1.05);
+.products__item:hover {
+  border: 1px solid #0a26f7;
 }
 
 h3 {
