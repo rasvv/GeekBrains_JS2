@@ -1,52 +1,16 @@
 'use strict'
-// const products = [
-//     {id: 1, title: 'Notebook', price: 20000},
-//     {id: 2, title: 'Mouse', price: 1500},
-//     {id: 3, title: 'Keyboard', price: 5000},
-//     {id: 4, title: 'Gamepad', price: 4500},
-//     {id: 5, title: 'Notebook', price: 20000},
-//     {id: 6, title: 'Mouse', price: 1500},
-//     {id: 7, title: 'Keyboard', price: 5000},
-//     {id: 8, title: 'Gamepad', price: 4500},
-// 	 {id: 9, title: 'Notebook', price: 20000},
-//     {id: 10, title: 'Mouse', price: 1500},
-//     {id: 11, title: 'Keyboard', price: 5000},
-//     {id: 12, title: 'Gamepad', price: 4500},	 
-// ];
-
-// const renderProduct = (item) => {
-// 	let {title, price} = item;
-//    return `<div class="product-item">
-// 					 <h3>${title}</h3>
-// 					 <div class='img'> 
-// 					 	<img src="https://picsum.photos/200/200?random=${Math.random()}" alt="">
-// 					 </div>					
-//                 <p>${price} р.</p>
-//                 <button class="by-btn">Добавить в корзину</button>
-//               </div>`;
-// };
-
-// // const renderProducts = (list) => {
-// // 	let productList = '';
-// // 	list.forEach(item => productList += renderProduct(item));
-// //    document.querySelector('.products').innerHTML = productList;
-// // };
-// const renderProducts = (list) => {
-// 	// let productList = '';
-// 	list.forEach(item => document.querySelector('.products').innerHTML += renderProduct(item));
-// };
-// renderProducts(products);
 
 
 class ProductsItem{
-	constructor(title, price){
-		this.title = title;
-		this.price = price;
-		this.img = '<img src="https://picsum.photos/200/200?random=${Math.random()}" alt=""></img>'
+	constructor(product, img = '<img src="https://picsum.photos/200/200?random=${Math.random()}" alt="img"></img>'){
+		this.title = product.title;
+		this.price = product.price;
+		this.id = product.id;
+		this.img = img;
 	}
 
 	render() {
-		return `<div class="product__item">
+		return `<div class="product__item" data-id = "${this.id}">
 		<h3>${this.title}</h3>
 		<div class='img'> 
 			${this.img}
@@ -58,12 +22,41 @@ class ProductsItem{
 }
 
 class ProductsList {
-	constructor() {
-		this.products = [];
+	#products;
+	#allProducts;
+	totalPrice = document.querySelector('.totalprice');
+	discountPrice = document.querySelector('.discountprice');
+
+	constructor(container = '.products__list') {
+		this.container = container;
+		this.#products = [];
+		this.#allProducts = [];
+
+		this.#fetchProducts();
+		this.#render();
+		this.productsTotalPrice();
+		this.getProductsTotalPrice();
+		getTotalWithDiscount(discount)
+
 	}
 
-	fetchProducts() {
-		this.products = [
+	setProductsTotalPrice(price) {
+		let total = +this.totalPrice.dataset.price;
+		total += +price;
+		this.totalPrice.dataset.price = total;
+	}
+
+	getProductsTotalPrice() {
+		return this.totalPrice.dataset.price;
+	}
+
+	getTotalWithDiscount(discount) {
+	  let priceWithDiscpunt = this.getProductsTotalPrice() - this.getProductsTotalPrice() * discount
+     return priceWithDiscpunt;
+  }
+
+	#fetchProducts() {
+		this.#products = [
 			{id: 1, title: 'Notebook', price: 20000},
 			{id: 2, title: 'Mouse', price: 1500},
 			{id: 3, title: 'Keyboard', price: 5000},
@@ -76,19 +69,24 @@ class ProductsList {
 			{id: 10, title: 'Mouse', price: 1500},
 			{id: 11, title: 'Keyboard', price: 5000},
 			{id: 12, title: 'Gamepad', price: 4500},	 
-		]
+		];
 	}
 
-	render() {
-		let listHTML = '';
-		this.products.forEach(product => {
-			const productItem = new ProductsItem(product.title, product.price);
-			listHTML += productItem.render();
+	#render() {
+		const listHTML = document.querySelector(this.container);
+		this.#products.forEach((product) => {
+			const productsItem = new ProductsItem(product);
+			console.log(productsItem);
+			this.#allProducts.push(productsItem);
+			listHTML.insertAdjacentHTML('beforeend', productsItem.render());
+			this.setProductsTotalPrice(product.price);
 		});
-		document.querySelector('.products__list').insertAdjacentHTML('beforeend', listHTML);
+		console.log(this.getProductsTotalPrice());
+		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.getProductsTotalPrice()} рублей`
+		this.discountPrice.innerHTML = `Стоимость со скидкой = ${this.getTotalWithDiscount(0.07)} рублей`
 	}
+
+
 }
 
-const list = new ProductsList();
-list.fetchProducts();
-list.render();
+const productsList = new ProductsList();
