@@ -34,9 +34,9 @@ class ProductsList {
 
 		this.#fetchProducts();
 		this.#render();
-		this.productsTotalPrice();
+		this.setProductsTotalPrice();
 		this.getProductsTotalPrice();
-		getTotalWithDiscount(discount)
+		this.getTotalWithDiscount()
 
 	}
 
@@ -51,7 +51,7 @@ class ProductsList {
 	}
 
 	getTotalWithDiscount(discount) {
-	  let priceWithDiscpunt = this.getProductsTotalPrice() - this.getProductsTotalPrice() * discount
+	  let priceWithDiscpunt = this.getProductsTotalPrice() - this.getProductsTotalPrice() * (discount / 100)
      return priceWithDiscpunt;
   }
 
@@ -83,7 +83,8 @@ class ProductsList {
 		});
 		console.log(this.getProductsTotalPrice());
 		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.getProductsTotalPrice()} рублей`
-		this.discountPrice.innerHTML = `Стоимость со скидкой = ${this.getTotalWithDiscount(0.07)} рублей`
+		let discount = 8;
+		this.discountPrice.innerHTML = `Стоимость со скидкой ${discount}% = ${this.getTotalWithDiscount(discount)} рублей`
 	}
 
 
