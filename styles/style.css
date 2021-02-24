@@ -135,11 +135,6 @@ input, select {
   vertical-align: middle;
 }
 
-html {
-  font-family: 'Myriad Pro', 'Myriad Pro', 'Myriad Pro', 'Myriad Pro',sans-serif;
-  color: #363636;
-}
-
 h1 {
   font-size: 48px;
   line-height: 58px;
@@ -231,8 +226,8 @@ h3 {
 }
 
 .img {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   /* display: block; */
   border: 1px solid #ddd;
   margin: 0 0 10px 0;
@@ -241,5 +236,18 @@ h3 {
 p {
   font-size: 30px;
   margin: 0 0 20px 0;
+}
+
+label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+label input {
+  width: 40px;
 }
 /*# sourceMappingURL=style.css.map */
