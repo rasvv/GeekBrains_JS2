@@ -40,10 +40,8 @@ class ProductsList {
 
 	}
 
-	setProductsTotalPrice(price) {
-		let total = +this.totalPrice.dataset.price;
-		total += price;
-		this.totalPrice.dataset.price = total;
+	sum() {
+		return this.#products.reduce((sum, {price}) => sum + price, 0);
 	}
 
 	getProductsTotalPrice() {
@@ -79,10 +77,11 @@ class ProductsList {
 			console.log(productsItem);
 			this.#allProducts.push(productsItem);
 			listHTML.insertAdjacentHTML('beforeend', productsItem.render());
-			this.setProductsTotalPrice(product.price);
+			// this.setProductsTotalPrice(product.price);
 		});
+		// this.setProductsTotalPrice(product.price);
 		console.log(this.getProductsTotalPrice());
-		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.getProductsTotalPrice()} рублей`
+		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.sum()} рублей`
 		let discount = 8;
 		this.discountPrice.innerHTML = `Стоимость со скидкой ${discount}% = ${this.getTotalWithDiscount(discount)} рублей`
 	}
