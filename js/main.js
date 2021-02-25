@@ -1,9 +1,27 @@
 'use strict'
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+
+
+let getRequest = (url, callBack) => {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.onreadystatechange = () => {
+		if (xhr.readyState === 4) {
+			if (xhr.status !== 200) {
+				console.log('Error');
+			} else {
+				callBack(xhr.responseText);
+			}
+		}
+	}
+	xhr.send();
+};
+
 
 
 class ProductsItem{
 	constructor(product, img = '<img src="https://picsum.photos/200/200?random=${Math.random()}" alt="img"></img>'){
-		this.title = product.title;
+		this.title = product.product_name;
 		this.price = product.price;
 		this.id = product.id;
 		this.img = img;
@@ -32,11 +50,12 @@ class ProductsList {
 		this.#products = [];
 		this.#allProducts = [];
 
-		this.#fetchProducts();
-		this.#render();
-		this.setProductsTotalPrice();
-		this.getProductsTotalPrice();
-		this.getTotalWithDiscount()
+		// this.#fetchProducts();
+		this.#getProducts()
+		.then((data) => {
+			this.#products = [...data];
+			this.#render();
+		});
 
 	}
 
@@ -44,31 +63,28 @@ class ProductsList {
 		return this.#products.reduce((sum, {price}) => sum + price, 0);
 	}
 
-	getProductsTotalPrice() {
-		return this.totalPrice.dataset.price;
-	}
-
 	getTotalWithDiscount(discount) {
-	  let priceWithDiscpunt = this.getProductsTotalPrice() - this.getProductsTotalPrice() * (discount / 100)
+	  let priceWithDiscpunt = this.sum() - this.sum() * (discount / 100);
      return priceWithDiscpunt;
-  }
+  	}
 
-	#fetchProducts() {
-		this.#products = [
-			{id: 1, title: 'Notebook', price: 20000},
-			{id: 2, title: 'Mouse', price: 1500},
-			{id: 3, title: 'Keyboard', price: 5000},
-			{id: 4, title: 'Gamepad', price: 4500},
-			{id: 5, title: 'Notebook', price: 20000},
-			{id: 6, title: 'Mouse', price: 1500},
-			{id: 7, title: 'Keyboard', price: 5000},
-			{id: 8, title: 'Gamepad', price: 4500},
-			{id: 9, title: 'Notebook', price: 20000},
-			{id: 10, title: 'Mouse', price: 1500},
-			{id: 11, title: 'Keyboard', price: 5000},
-			{id: 12, title: 'Gamepad', price: 4500},	 
-		];
+	// #fetchProducts() {
+	// 	getRequest(`${API}/catalogData.json`, (data) => {
+	// 		console.log(data);
+	// 		this.#products = JSON.parse(data);
+	// 		this.#render();
+	// 		this.showSum();
+	// 	});
+	// }
+
+	#getProducts () {
+		return fetch(`${API}/catalogData.json`)
+		.then((response) => response.json())
+		.catch((err) => {
+			console.log(err);
+		});
 	}
+
 
 	#render() {
 		const listHTML = document.querySelector(this.container);
@@ -77,15 +93,14 @@ class ProductsList {
 			console.log(productsItem);
 			this.#allProducts.push(productsItem);
 			listHTML.insertAdjacentHTML('beforeend', productsItem.render());
-			// this.setProductsTotalPrice(product.price);
 		});
-		// this.setProductsTotalPrice(product.price);
-		console.log(this.getProductsTotalPrice());
-		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.sum()} рублей`
-		let discount = 8;
-		this.discountPrice.innerHTML = `Стоимость со скидкой ${discount}% = ${this.getTotalWithDiscount(discount)} рублей`
 	}
 
+	showSum() {
+		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.sum()} рублей`;
+		let discount = 10;
+		this.discountPrice.innerHTML = `Стоимость со скидкой ${discount}% = ${this.getTotalWithDiscount(discount)} рублей`;		
+	}
 
 }
 
