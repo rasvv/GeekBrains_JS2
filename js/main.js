@@ -84,7 +84,8 @@ class ProductsList {
 ///////////////////////////////////////////////////////////////////////////////
 	//Вызов промиса
 	#fetchProducts() {
-		getRequest(`${API}/catalogData.json`).then((data) => {
+		getRequest(`${API}/catalogData.json`)
+		.then((data) => {
 			console.log(data);
 			this.#products = JSON.parse(data);
 			this.#render();
@@ -124,25 +125,37 @@ const productsList = new ProductsList();
 
 
 
-class CartList extends ProductsList {
+class CartList extends ProductsList{
 	#products;
 	#allProducts;
-	totalPrice = document.querySelector('.totalprice');
-	discountPrice = document.querySelector('.discountprice');
+	totalPrice = document.querySelector('.cart__totalprice');
+	discountPrice = document.querySelector('.cart__discountprice');
 
-	constructor(container = '.cart__list') {
+	constructor(container = '.cart') {
 		this.container = container;
 		this.#products = [];
 		this.#allProducts = [];
 
+	  
 		// this.#fetchProducts();
 		this.#getProducts()
 		.then((data) => {
 			this.#products = [...data];
 			this.#render();
+			this.showSum();
 		});
 
 	}
+
+	sum() {
+		return this.#products.reduce((sum, {price}) => sum + price, 0);
+	}
+
+	getTotalWithDiscount(discount) {
+	  let priceWithDiscpunt = this.sum() - this.sum() * (discount / 100);
+	 return priceWithDiscpunt;
+	  }
+	  
 
 	#getProducts () {
 		return fetch(`${API}/catalogData.json`)
