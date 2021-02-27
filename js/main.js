@@ -21,15 +21,15 @@ const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-a
 
 /////////////////////////////////////////////////////////////////////////////////
 //  Завернул предыдущую функцию в промис
-let getRequest = (url) => {
-	return new Promise((resolve, reject) => {
-	  const xhr = new XMLHttpRequest();
-	  xhr.open("GET", url, true);
-	  xhr.onload = () => resolve(xhr.responseText);
-	  xhr.onerror = () => reject(xhr.statusText);
-	  xhr.send();
-	});
- }
+// let getRequest = (url) => {
+// 	return new Promise((resolve, reject) => {
+// 	  const xhr = new XMLHttpRequest();
+// 	  xhr.open("GET", url, true);
+// 	  xhr.onload = () => resolve(xhr.responseText);
+// 	  xhr.onerror = () => reject(xhr.statusText);
+// 	  xhr.send();
+// 	});
+//  }
 //////////////////////////////////////////////////////////////////////////////////
 
 class ProductsItem{
@@ -62,14 +62,16 @@ class ProductsList {
 		this.container = container;
 		this.#products = [];
 		this.#allProducts = [];
+		this.init();
+	}
 
-		this.#fetchProducts();
-		// this.#getProducts()
-		// .then((data) => {
-		// 	this.#products = [...data];
-		// 	this.#render();
-		// });
-
+	init() {
+		// this.#fetchProducts();
+		this.#getProducts()
+		.then((data) => {
+			this.#products = [...data];
+			this.#render();
+		});		
 	}
 
 	sum() {
@@ -83,25 +85,28 @@ class ProductsList {
 
 ///////////////////////////////////////////////////////////////////////////////
 	//Вызов промиса
-	#fetchProducts() {
-		getRequest(`${API}/catalogData.json`)
-		.then((data) => {
-			console.log(data);
-			this.#products = JSON.parse(data);
-			this.#render();
-			this.showSum();
-		});
-	}
-////////////////////////////////////////////////////////////////////////////////
-
-	// #getProducts () {
-	// 	return fetch(`${API}/catalogData.json`)
-	// 	.then((response) => response.json())
-	// 	.catch((err) => {
-	// 		console.log(err);
+	// #fetchProducts() {
+	// 	getRequest(`${API}/catalogData.json`)
+	// 	.then((data) => {
+	// 		console.log(data);
+	// 		this.#products = JSON.parse(data);
+	// 		this.#render();
+	// 		this.showSum();
 	// 	});
 	// }
+////////////////////////////////////////////////////////////////////////////////
 
+	#getProducts () {
+		return fetch(`${API}/catalogData.json`)
+		.then((response) => response.json())
+		.catch((err) => {
+			console.log(err);
+		});
+	}
+
+	getProduct (el) {
+		return this.#products[id];
+	}
 
 	#render() {
 		const listHTML = document.querySelector(this.container);
@@ -124,64 +129,34 @@ class ProductsList {
 const productsList = new ProductsList();
 
 
-
-class CartList extends ProductsList{
-	#products;
-	#allProducts;
+class CartList {
+	#products = [];
+	#allProducts = [];
+	listHTML = '';
 	totalPrice = document.querySelector('.cart__totalprice');
 	discountPrice = document.querySelector('.cart__discountprice');
-
 	constructor(container = '.cart') {
 		this.container = container;
 		this.#products = [];
 		this.#allProducts = [];
-
-	  
-		// this.#fetchProducts();
-		this.#getProducts()
-		.then((data) => {
-			this.#products = [...data];
-			this.#render();
-			this.showSum();
-		});
-
+		this.#getButtons();
+		this.listHTML = document.querySelector(this.container);
 	}
 
-	sum() {
-		return this.#products.reduce((sum, {price}) => sum + price, 0);
+	#getButtons(){
+		let buttons = document.querySelectorAll('.by__btn');
+		buttons.forEach((btn) => {
+			btn.addEventListener('click', (element) => {
+				let el = element.target.parentNode;
+				this.#addToCart(el)
+			});
+		})
 	}
 
-	getTotalWithDiscount(discount) {
-	  let priceWithDiscpunt = this.sum() - this.sum() * (discount / 100);
-	 return priceWithDiscpunt;
-	  }
-	  
-
-	#getProducts () {
-		return fetch(`${API}/catalogData.json`)
-		.then((response) => response.json())
-		.catch((err) => {
-			console.log(err);
-		});
+	#addToCart(el) {
+		this.listHTML.insertAdjacentHTML('beforeend', el.outerHTML);
 	}
-
-
-	#render() {
-		const listHTML = document.querySelector(this.container);
-		this.#products.forEach((product) => {
-			const productsItem = new ProductsItem(product);
-			console.log(productsItem);
-			this.#allProducts.push(productsItem);
-			listHTML.insertAdjacentHTML('beforeend', productsItem.render());
-		});
-	}
-
-	showSum() {
-		this.totalPrice.innerHTML = `Суммарная стоимость всех товаров = ${this.sum()} рублей`;
-		let discount = 10;
-		this.discountPrice.innerHTML = `Стоимость со скидкой ${discount}% = ${this.getTotalWithDiscount(discount)} рублей`;		
-	}
-
 }
 
-const cartList = new CartList();
+
+setTimeout(() => {const cartList = new CartList()}, 1000)
