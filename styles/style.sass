@@ -1,0 +1,28 @@
+@import "fonts"
+@import "reset"
+@import "vars"
+@import "mixins"
+
+html
+	// font-family: 'Myriad Pro', 'Myriad Pro', 'Myriad Pro', 'Myriad Pro',sans-serif
+	color: $other1Color
+
+h1
+	+font(48px, 58px, 900)
+
+.container
+	max-width: 1140px
+	margin: 30px auto
+
+button
+	height: 40px
+	width: 250px
+	border-radius: 5px
+	background-color: #bbb
+
+	&:hover
+		background-color: #aaa
+
+input, textarea
+	margin-bottom: 16px
+	width: 250px
