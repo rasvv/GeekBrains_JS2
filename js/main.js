@@ -18,24 +18,14 @@ Two: 'I'll see you next time.'
 One: 'Sure.' Bye.'`
 
 
-//Заменяет все одинарные ковычки двойными
+console.log('Заменяем все одинарные кавычки двойными');
 console.log(dialog.replace(/'/g, `"`));
 
-//Заменяет все одинарные ковычки, обозначающие диалог
+console.log('Заменяем все одинарные кавычки, обозначающие диалог');
 let selfDialog = dialog.replace(/\B'/g, `"`);
 console.log(selfDialog.replace(/'\B/g, `"`));
 
-
-
-const name = document.getElementById('name');
-let phone = document.getElementById('phone');
-let email = document.getElementById('email');
-
-function repaint() {
-	name.style.border = '1px solid black';
-	phone.style.border = '1px solid black';
-	email.style.border = '1px solid black';
-}
+// Верификация данных /////////////////////////////////////
 
 let result = false;
 let btn = document.querySelector('button');
@@ -43,19 +33,25 @@ btn.addEventListener('click', (event) => {
 	result = true;
 	repaint();
 
-	checkInput(name, /^[а-яёА-ЯЁ]*$/, name.value.replace(/\s/g, ''), 'Имя');
+	checkInput(user, /^[а-яёА-ЯЁ\s]*$/, 'Имя');
 
-	checkInput(phone, /^\+7\(\d{3}\)\d{3}\-\d{4}$/, phone.value, 'Телефон');
+	checkInput(phone, /^\+7\(\d{3}\)\d{3}\-\d{4}$/, 'Телефон');
 
-	checkInput(email, /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/, email.value, 'E-mail');
+	checkInput(email, /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/, 'E-mail');
 
 	if (!result) event.preventDefault();
 })
 
+const inputs = document.querySelectorAll('input');
 
+function repaint() {
+	inputs.forEach((input) => {
+		input.style.border = '1px solid black';
+	})
+}
 
-function checkInput(field, reg, txt, error) {
-	if (!reg.test(txt)) {
+function checkInput(field, reg, error) {
+	if (!reg.test(field.value)) {
 		// if (/^\d[\d\(\)\ -]{4,14}\d$/.test(phone.value)) {
 		result = false;
 		field.style.border = '2px solid red';
